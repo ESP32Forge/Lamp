@@ -155,6 +155,7 @@ static void server_task_func(void *args)
   struct sockaddr_in addrs_to_listen, source_addr;
   socklen_t source_addr_len = sizeof(source_addr);
   TCP_COMMAND_TYPE cmd;
+  char buf[TCP_COMMAND_SIZE] = "";
 
   /** Set which kind of addresses server will listen. **/
   /* Set IPV4. */
@@ -204,17 +205,28 @@ static void server_task_func(void *args)
       #if DEBUG_MODE_ENABLE == 1
         ESP_LOGE(TAG, "Accept socket failed: errno %d", errno);
       #endif
-    } 
-    
-    if(read(conn_fd, (void*)&cmd, TCP_COMMAND_SIZE) < 0)
+    }
+
+    if(read(conn_fd, (void*)buf, TCP_COMMAND_SIZE) < 0)
     {
       #if DEBUG_MODE_ENABLE == 1
         ESP_LOGE(TAG, "Read socket failed: errno %d", errno);
       #endif
     }
 
-    RX_command_frame(cmd);
-
+    /* Means GUI want to toggle the LED. */
+    /* TODO: Allow GUI to do more actions. */
+    if(memcmp((void*)buf, "GUI", 3) == 0)
+    {  
+      cmd.ID = LED_0;
+      cmd.action = TOOGLE_LED;
+      RX_command_frame(cmd);
+    }
+    else
+    {
+      memcpy((void*)&cmd, (void*)buf, TCP_COMMAND_SIZE);
+      RX_command_frame(cmd);
+    }
     shutdown(conn_fd, 0);
     close(conn_fd);
   }
