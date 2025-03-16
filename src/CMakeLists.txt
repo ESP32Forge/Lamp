@@ -37,11 +37,14 @@ set(CORE_SOURCE_PATH ${SOURCES_ROOT_PATH}/Core)
 # Path to the Core debug folder.
 set(CORE_DEBUG_FOLDER ${CORE_SOURCE_PATH}/Debug)
 
+# Path to the Core lamp folder.
+set(CORE_LAMP_FOLDER ${CORE_SOURCE_PATH}/Lamp)
+
 # General Core sources.
-set(SOURCE_CORE ${CORE_DEBUG_FOLDER}/Debug.c)
+set(SOURCE_CORE ${CORE_DEBUG_FOLDER}/Debug.c ${CORE_LAMP_FOLDER}/Lamp.c)
 
 # General include for Core headers.
-set(INC_CORE ${CORE_DEBUG_FOLDER})
+set(INC_CORE ${CORE_DEBUG_FOLDER} ${CORE_LAMP_FOLDER} )
 
 ###########
 #   REG   #

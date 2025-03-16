@@ -9,10 +9,8 @@
 /***************************************************************************************
  * Includes
  ***************************************************************************************/
-#include <LED.h>
+#include <Lamp.h>
 #include <Debug.h>
-
-#include <freertos/FreeRTOS.h>
 
 /***************************************************************************************
  * Functions
@@ -21,35 +19,34 @@
 void app_main() 
 {
 
-  int counter = 0;
+  bool error = false;
 
-  if(init_BSP_LED_module() != BSP_LED_OK)
+  /** Initialize BSP modules **/
+  if(BPS_button_LOG(init_BSP_button_module()) != BSP_BUTTON_OK)
   {
-    printf("Error BSP LED init.\n");
+    error = true;
+    #if DEBUG_MODE_ENABLE == 1
+      ESP_LOGE("MAIN", "Can not initialize BSP button.");
+    #endif
   }
 
-  if(init_LED(LED_0) != BSP_LED_OK)
+  if(!error && BPS_button_LOG(init_BSP_LED_module()) != BSP_BUTTON_OK)
   {
-    printf("Error BSP init LED.\n");
+    error = true;
+    #if DEBUG_MODE_ENABLE == 1
+      ESP_LOGE("MAIN", "Can not initialize BSP button.");
+    #endif
   }
 
-  while(true)
+  if(!error)
   {
-
-    if(counter % 2)
+  
+    if(core_lamp_LOG(Lamp_init(LAMP_0, BUTTON_0, LED_0) != CORE_LAMP_OK))
     {
-      if(set_LED_state(LED_0, MIN_DUTY_CYCLE_PERC+(counter%100)) != BSP_LED_OK)
-      {
-        printf("Error set_LED_state.\n");
-      }
+      #if DEBUG_MODE_ENABLE == 1
+        ESP_LOGE("MAIN", "Failed to initialize LAMP.");
+      #endif
     }
-    else
-    {
-      turn_off_LED(LED_0);
-    }
-
-    counter++;
-    vTaskDelay(1000u/portTICK_PERIOD_MS);
   }
 
 }
