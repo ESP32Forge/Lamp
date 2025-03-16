@@ -9,17 +9,10 @@
 /***************************************************************************************
  * Includes
  ***************************************************************************************/
-#include <Button.h>
+#include <LED.h>
 #include <Debug.h>
 
 #include <freertos/FreeRTOS.h>
-
-
-static int num_of_calls = 0;
-void button_CB(const Button_ID ID)
-{
-  num_of_calls++;
-}
 
 /***************************************************************************************
  * Functions
@@ -28,22 +21,34 @@ void button_CB(const Button_ID ID)
 void app_main() 
 {
 
-  if(init_BSP_button_module() != BSP_BUTTON_OK)
+  int counter = 0;
+
+  if(init_BSP_LED_module() != BSP_LED_OK)
   {
-    printf("Error BSP module init.\n");
+    printf("Error BSP LED init.\n");
   }
 
-  if(init_button(BUTTON_0) != BSP_BUTTON_OK)
+  if(init_LED(LED_0) != BSP_LED_OK)
   {
-    printf("Error BSP init button.\n");
+    printf("Error BSP init LED.\n");
   }
 
-  uint64_t num_of_presses = 0u;
   while(true)
   {
-    get_num_of_presses(BUTTON_0, &num_of_presses);
-    printf("Num of pressed times: %lld\n", num_of_presses);
-    printf("Num of calls: %d\n", num_of_calls);
+
+    if(counter % 2)
+    {
+      if(set_LED_state(LED_0, MIN_DUTY_CYCLE_PERC+(counter%100)) != BSP_LED_OK)
+      {
+        printf("Error set_LED_state.\n");
+      }
+    }
+    else
+    {
+      turn_off_LED(LED_0);
+    }
+
+    counter++;
     vTaskDelay(1000u/portTICK_PERIOD_MS);
   }
 
