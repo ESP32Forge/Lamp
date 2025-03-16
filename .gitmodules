@@ -1,0 +1,8 @@
+[submodule "src/BSP/Button"]
+	path = src/BSP/Button
+	url = git@github.com:ESP32Forge/Button.git
+	branch = main
+[submodule "src/Core/Debug"]
+	path = src/Core/Debug
+	url = git@github.com:ESP32Forge/Debug.git
+	branch = main
