@@ -284,6 +284,14 @@ void __attribute__((weak)) RX_command_frame(const TCP_COMMAND_TYPE cmd)
           /* Imposible to reach this line as it was cheked before. */
         }
         break;
+
+      case SET_PWM:
+        if(lamps_infos[ID].state)
+        {
+          lamps_infos[ID].PWM_percentage = cmd.pwm;
+          set_LED_state(ID, lamps_infos[ID].PWM_percentage);
+        }
+        break;
       default:
         ESP_LOGE(TAG, "Received invalid action.");
         break;
