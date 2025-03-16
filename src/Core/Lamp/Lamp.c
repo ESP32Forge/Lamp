@@ -172,6 +172,26 @@ Lamp_return de_init_lamp(const Lamp_ID lamp)
   return CORE_LAMP_OK;
 }
 
+Lamp_return lamp_start_server(void)
+{
+  if(core_TCP_server_LOG(init_TCP_server()) != ESP_OK)
+  {
+    return CORE_LAMP_START_SERVER_ERR;
+  }
+
+  return CORE_LAMP_OK;
+}
+
+Lamp_return lamp_stop_server(void)
+{
+  if(core_TCP_server_LOG(de_init_TCP_server()) != ESP_OK)
+  {
+    return CORE_LAMP_STOP_SERVER_ERR;
+  }
+
+  return CORE_LAMP_OK;
+}
+
 inline Lamp_return core_lamp_LOG(const Lamp_return ret)
 {
   #if DEBUG_MODE_ENABLE == 1
@@ -231,6 +251,44 @@ static bool toogle_LED_lamp(const Lamp_ID ID)
   lamps_infos[ID].state = !lamps_infos[ID].state;
 
   return true;
+}
+
+/* Implemtation of the TCP server received callback. */
+void __attribute__((weak)) RX_command_frame(const TCP_COMMAND_TYPE cmd)
+{
+
+  bool LED_ID_is_valid = false;
+  switch(cmd.ID)
+  {
+    case LED_0:
+      LED_ID_is_valid = true;
+      break;
+    default:
+      ESP_LOGE(TAG, "Received invalid LED identifier.");
+      break;
+  }
+
+  if(LED_ID_is_valid)
+  {
+    Lamp_ID ID = 0u;
+    while(ID < NUM_OF_LAMPS && lamps_infos[ID].LED != cmd.ID)
+    {
+      ID++;
+    }
+
+    switch(cmd.action)
+    {
+      case TOOGLE_LED:
+        if(!toogle_LED_lamp(ID))
+        {
+          /* Imposible to reach this line as it was cheked before. */
+        }
+        break;
+      default:
+        ESP_LOGE(TAG, "Received invalid action.");
+        break;
+    }
+  }
 }
 
 /* Implemtation of the button callbacks. */

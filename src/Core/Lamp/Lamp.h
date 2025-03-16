@@ -6,14 +6,15 @@
  * @brief     This header file declares the functions to control the a lamp.
  */
 
-#ifndef CORE_LAMP_H_
-#define CORE_LAMP_H_
-
+ #ifndef CORE_LAMP_H_
+ #define CORE_LAMP_H_
+ 
 /***************************************************************************************
  * Includes
  ***************************************************************************************/
 #include <Button.h>
 #include <LED.h>
+#include <TCP_server.h>
 
 /***************************************************************************************
  * Defines
@@ -34,7 +35,9 @@
   LAMP_RETURN(CORE_LAMP_INIT_SEMAPHORE_ERR) \
   LAMP_RETURN(CORE_LAMP_UNKOWN_ID_ERR)      \
   LAMP_RETURN(CORE_LAMP_INIT_TASK_ERR)      \
-  LAMP_RETURN(CORE_LAMP_DE_INIT_ERR)             
+  LAMP_RETURN(CORE_LAMP_DE_INIT_ERR)        \
+  LAMP_RETURN(CORE_LAMP_START_SERVER_ERR)   \
+  LAMP_RETURN(CORE_LAMP_STOP_SERVER_ERR)         
        
 /***************************************************************************************
  * Data Type Definitions
@@ -111,6 +114,34 @@ Lamp_return Lamp_init(const Lamp_ID lamp,const Button_ID button, const LED_ID LE
 Lamp_return de_init_lamp(const Lamp_ID lamp);
 
 /**
+ * @brief Starts the server that listen the commands.
+ *
+ * @param void
+ *
+ * @return CORE_LAMP_OK if the operation went well,
+ *         otherwise:
+ * 
+ *           - CORE_LAMP_START_SERVER_ERR: 
+ *               Failed to initialize the server. 
+ * 
+ */
+Lamp_return lamp_start_server(void);
+
+/**
+ * @brief Stops the server that listen the commands.
+ *
+ * @param void
+ *
+ * @return CORE_LAMP_OK if the operation went well,
+ *         otherwise:
+ * 
+ *           - CORE_LAMP_STOP_SERVER_ERR: 
+ *               Failed to stop the server. 
+ * 
+ */
+Lamp_return lamp_stop_server(void);
+
+/**
  * @brief Prints the return of a lamp module function if the system was configured 
  *        in debug mode.
  *
@@ -121,3 +152,4 @@ Lamp_return de_init_lamp(const Lamp_ID lamp);
 Lamp_return core_lamp_LOG(const Lamp_return ret);
 
 #endif /* CORE_LAMP_H_ */
+ 

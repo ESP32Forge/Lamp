@@ -14,31 +14,12 @@
  ***************************************************************************************/
 #include <driver/gpio.h>
 #include <driver/ledc.h>
+#include <System_lights.h>
  
 /***************************************************************************************
  * Defines
  ***************************************************************************************/
-
-/* Macro that enlist the system LEDs. It is mandatory to not set values to the 
- * enumerates.
- */
-#define LEDS \
-  LED(LED_0)
-
-/* Maximum and minimun duty cycle that can be set to the PWM LED's in terms of
- * percentage.
- */
-#define MAX_DUTY_CYCLE_PERC 100u
-#define MIN_DUTY_CYCLE_PERC 20u
-
-/* Checks if the MIN_DUTY_CYCLE_PERCENTAGE and MIN_DUTY_CYCLE_PERCENTAGE have a 
- * valid value. 
- */
-#if MIN_DUTY_CYCLE_PERCENTAGE < 0 || MAX_DUTY_CYCLE_PERCENTAGE > 100
-  #error "Invalid PWM duty cycle: [0-100]:"
-  #error "refer to (MAX_DUTY_CYCLE_PERCENTAGE, MIN_DUTY_CYCLE_PERCENTAGE)"
-#endif
-
+  
 /* Macro that describes the GPIO configurations of the LEDs. 
  *
  * Parameters:
@@ -60,21 +41,7 @@
  */
 #define LED_CONFIGURATIONS                                                         \
   LED_CONFIG(LED_0, GPIO_NUM_20, GPIO_FLOATING, LEDC_TIMER_0, LEDC_LOW_SPEED_MODE, \
-             LEDC_CHANNEL_0, LEDC_TIMER_13_BIT, 4000u)
-             
-/***************************************************************************************
- * Data Type Definitions
- ***************************************************************************************/
-
-/* Enumerate that enlist the system LEDs. */
-typedef enum
-{
-  #define LED(enumerate) enumerate,
-    LEDS
-  #undef LED
-  /* Last enumerate always, indicates the number of elements. Do not delete */
-  NUM_OF_LEDS,
-} LED_ID;
+             LEDC_CHANNEL_0, LEDC_TIMER_13_BIT, 4000u)     
 
 #endif /* LED_PHYSICAL_CONNECTION_H_ */
   

@@ -40,11 +40,20 @@ set(CORE_DEBUG_FOLDER ${CORE_SOURCE_PATH}/Debug)
 # Path to the Core lamp folder.
 set(CORE_LAMP_FOLDER ${CORE_SOURCE_PATH}/Lamp)
 
+# Path to the Core WiFi folder.
+set(CORE_WIFI_FOLDER ${CORE_SOURCE_PATH}/WiFi)
+
+# Path to the Core TCP client folder.
+set(CORE_TCP_SERVER_FOLDER ${CORE_SOURCE_PATH}/TCP_server)
+
+# Path to the Core System config folder.
+set(CORE_SYSTEM_CONFIG_FOLDER ${CORE_SOURCE_PATH}/System_config)
+
 # General Core sources.
-set(SOURCE_CORE ${CORE_DEBUG_FOLDER}/Debug.c ${CORE_LAMP_FOLDER}/Lamp.c)
+set(SOURCE_CORE ${CORE_DEBUG_FOLDER}/Debug.c ${CORE_LAMP_FOLDER}/Lamp.c ${CORE_WIFI_FOLDER}/WiFi.c ${CORE_TCP_SERVER_FOLDER}/TCP_server.c)
 
 # General include for Core headers.
-set(INC_CORE ${CORE_DEBUG_FOLDER} ${CORE_LAMP_FOLDER} )
+set(INC_CORE ${CORE_DEBUG_FOLDER} ${CORE_LAMP_FOLDER} ${CORE_WIFI_FOLDER} ${CORE_TCP_SERVER_FOLDER} ${CORE_SYSTEM_CONFIG_FOLDER})
 
 ###########
 #   REG   #

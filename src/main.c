@@ -41,12 +41,24 @@ void app_main()
   if(!error)
   {
   
-    if(core_lamp_LOG(Lamp_init(LAMP_0, BUTTON_0, LED_0) != CORE_LAMP_OK))
+    if(core_lamp_LOG(Lamp_init(LAMP_0, BUTTON_0, LED_0) == CORE_LAMP_OK))
+    {
+
+      if(core_lamp_LOG(lamp_start_server()) != CORE_LAMP_OK)
+      {
+        #if DEBUG_MODE_ENABLE == 1
+          ESP_LOGE("MAIN", "Failed to initialize server LAMP.");
+        #endif
+      }
+      
+    }
+    else
     {
       #if DEBUG_MODE_ENABLE == 1
         ESP_LOGE("MAIN", "Failed to initialize LAMP.");
       #endif
     }
+
   }
 
 }
